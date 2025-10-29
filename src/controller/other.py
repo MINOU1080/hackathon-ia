@@ -75,8 +75,9 @@ def load_sheet(path: str) -> pd.DataFrame:
         df = pd.read_csv(path)
     # normalise les noms de colonnes (au cas où)
     df.columns = [c.strip() for c in df.columns]
-    required = {"chunk_url", "chunk_id", "chunk_name"}
+    required = {"chunk_url", "chunk_id", "chunk_name","chunk_content"}
     missing = required - set(df.columns)
+    print(df.values)
     if missing:
         raise ValueError(f"Colonnes manquantes dans {path}: {missing}")
     return df

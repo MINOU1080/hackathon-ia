@@ -1,0 +1,23 @@
+Current accounts | checking, IBAN, account statement, bank identity, open account
+Cards & codes | debit card, Maestro, Visa, Mastercard, CVC, CVV, PIN, renewal
+Payments | contactless, QR, instant payment, standing order, direct debit
+Transfers & wires | SEPA transfer, international, SWIFT, fees, delays
+Cash & limits | ATM withdrawal, cash limit, spending limit
+Abroad | pay abroad, exchange rate, travel, foreign use
+Savings | savings account, interest, goals, Save Up
+Youth & minors | teen account, parental control, kids, under 18
+Investments | funds, ETFs, securities, risk profile, brokerage
+Loans & credit | personal loan, mortgage, simulation
+Insurance | account insurance, card insurance, travel, purchase protection
+Security & fraud | phishing, smishing, card block, theft, strong authentication
+Online & mobile banking | Home’Bank, ING app, login, password, itsme
+Data & privacy | personal data, GDPR, view, update, delete
+Identity & documents | KYC, verification, ID document, proof, certificate
+Tax certificates | tax statement, tax documents, fiscal certificate
+Disputes & chargeback | dispute transaction, chargeback, unknown payment
+Fees & pricing | charges, commissions, pricing grid
+Notifications & alerts | sms, email, push alerts, settings
+Customer support | contact, support, appointment, branch
+Technical issues | bug, error, connectivity, update
+Accessibility | disability, assistive features, support
+Business banking | business account, POS terminals, invoicing, corporate SEPA

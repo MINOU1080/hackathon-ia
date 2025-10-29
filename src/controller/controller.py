@@ -47,18 +47,3 @@ class Controller:
                 print("Neighbors:", list(neigh.items()))  # les 3 premiers voisins
             """
 
-    def find_best_chunk(query: str):
-        q_emb = model.encode([query], normalize_embeddings=True)[0]
-        sims = embs @ q_emb
-        idx = int(np.argmax(sims))
-        return ids[idx], titles[idx], float(sims[idx])
-
-
-    def test(self):
-        model = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
-
-        chunk_titles = {cid: extract_title(txt) for cid, txt in preview_chunks.items()}
-
-        ids = list(chunk_titles.keys())
-        titles = list(chunk_titles.values())
-        embs = model.encode(titles, normalize_embeddings=True)

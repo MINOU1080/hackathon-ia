@@ -1,0 +1,23 @@
+Zichtrekeningen | zichtrekening, IBAN, rekeninguittreksel, bankidentiteit, rekening openen
+Kaarten & codes | bankkaart, Maestro, Visa, Mastercard, CVC, CVV, pincode, vernieuwing
+Betalingen | contactloos, QR, instantbetaling, doorlopende opdracht, domiciliëring
+Overschrijvingen | SEPA-overschrijving, internationaal, SWIFT, kosten, termijn
+Cash & limieten | geldafhaling, ATM, opname-limiet, bestedingslimiet
+In het buitenland | betalen in het buitenland, wisselkoers, reizen
+Sparen | spaarrekening, rente, doelen, Save Up
+Jongeren & minderjarigen | jongerenrekening, ouderlijk toezicht, kids, -18
+Beleggen | fondsen, ETF’s, effecten, risicoprofiel, brokerage
+Leningen & krediet | persoonlijke lening, hypotheek, simulatie
+Verzekeringen | rekeningverzekering, kaartverzekering, reis, aankoopbescherming
+Veiligheid & fraude | phishing, smishing, kaart blokkeren, diefstal, sterke authenticatie
+Online & mobiel bankieren | Home’Bank, ING-app, login, wachtwoord, itsme
+Gegevens & privacy | persoonsgegevens, GDPR, raadplegen, wijzigen, verwijderen
+Identiteit & documenten | KYC, verificatie, identiteitsbewijs, attest
+Fiscale attesten | fiscale attesten, belastingdocumenten
+Geschillen & chargeback | betwiste transactie, terugboeking, onbekende betaling
+Kosten & tarieven | kosten, commissies, tarieflijst
+Meldingen & alerts | sms, e-mail, pushmeldingen, instellingen
+Klantendienst | contact, support, afspraak, kantoor
+Technische problemen | bug, fout, verbinding, update
+Toegankelijkheid | handicap, toegankelijkheidsfuncties, ondersteuning
+Zakelijk bankieren | zakelijke rekening, betaalterminal, facturatie, SEPA business
