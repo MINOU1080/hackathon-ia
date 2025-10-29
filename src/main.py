@@ -111,6 +111,8 @@ def find_relevant_chunks_xlsx(
 def main():
     controller = Controller(View())
     controller.d()
+    # controller.load_data()
+    controller.handle_record()
     #controller.load_data()
 
     query = "enfants mineurs" #request sur le speech to text
