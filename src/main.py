@@ -8,10 +8,10 @@ from controller.controller import Controller
 from view.view import View
 
 def main():
-    controller = Controller()
-    view = View(controller)
+    controller = Controller(View())
 
-    view.display()
+    controller.d()
+    controller.load_data()
 
 if __name__ == "__main__":
     main()

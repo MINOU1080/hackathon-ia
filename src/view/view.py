@@ -2,8 +2,8 @@ import streamlit as st
 from PIL import Image
 
 class View:
-    def __init__(self, controller):
-        self.controller = controller
+    def __init__(self):
+        pass
 
     def display(self):
         """Affiche l’interface utilisateur."""
@@ -13,5 +13,4 @@ class View:
         st.image(img, width=200)
 
         if st.button("Record"):
-            message = self.controller.handle_record()
-            st.text(message)
+            st.text("test")
