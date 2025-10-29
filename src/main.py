@@ -1,8 +1,10 @@
-import streamlit as st
+from http.client import responses
+
 import pandas as pd
-import matplotlib as m
 import numpy as np
-from google.cloud import speech_v2 as speech
+import re
+import unicodedata
+import time
 from sentence_transformers import SentenceTransformer,util
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -108,22 +110,106 @@ def find_relevant_chunks_xlsx(
     )
     return out
 
+def _normalize(s: str) -> str:
+    s = s.lower().strip()
+    s = ''.join(c for c in unicodedata.normalize('NFKD', s) if not unicodedata.combining(c))
+    return s
+
+def fun(path, user_query):
+    start_path = "data/10. Hackathon_Leuven_2025/chunks/500_750_processed_be_fr_2025_09_23/"
+    fullpath = start_path + path
+    with open(fullpath, "r", encoding="utf-8") as f:
+        text = f.read()
+
+    # Regex plus robuste : '### question' puis réponse jusqu'au prochain '###' en début de ligne
+    pattern = r"^###\s*(.+?)\s*\r?\n+([\s\S]*?)(?=^###|\Z)"
+    matches = re.findall(pattern, text, flags=re.DOTALL | re.MULTILINE)
+
+    faq = []
+    for q_text, r_text in matches:  # ✅ éviter d'écraser 'user_query'
+        faq.append({
+            "question": q_text.strip(),
+            "reponse": r_text.strip()
+        })
+
+    if not faq:
+        return None, 0.0, None
+
+    all_questions = [item["question"] for item in faq]
+
+    # Normalisation pour robustesse (accents/casse/espaces)
+    norm_questions = [_normalize(q) for q in all_questions]
+    norm_query = _normalize(user_query)
+
+    vec = TfidfVectorizer().fit(norm_questions + [norm_query])
+    q_vec = vec.transform([norm_query])
+    faq_vec = vec.transform(norm_questions)
+
+    scores = cosine_similarity(faq_vec, q_vec).ravel()
+
+    best_idx = scores.argmax()
+    best_score = float(scores[best_idx])
+    best_match = faq[best_idx]
+
+    # Retourne (question, score, réponse)
+    return best_match["question"], best_score, best_match["reponse"]
+
 def main():
     controller = Controller(View())
     controller.d()
     # controller.load_data()
     controller.handle_record()
     #controller.load_data()
+    t0 = time.time()
 
-    query = "enfants mineurs" #request sur le speech to text
+    query = "Est-il facile de passer de mon compte à l’aperçu de mes enfants ?" #request sur le speech to text
     themes = load_theme()
     best_theme, best_score = load_matching(themes,query)
 
     print(f"Thème détecté : {best_theme} (score : {best_score:.2f})")
 
     chunk_file = find_chunk(best_theme)
-    results = find_relevant_chunks_xlsx(x_path, best_theme, sheet_name=0, top_k=5, use_embeddings=False)
-    print(results)
+    res = find_relevant_chunks_xlsx(x_path, best_theme, sheet_name=0, top_k=5, use_embeddings=False)
+    print(res)
+
+    chunk_names = res["chunk_name"].tolist()   # top-k chunks
+    print(chunk_names)
+
+    # 🔎 Parcourt tous les chunks et garde le meilleur match global
+    best_global = {
+        "chunk": None,
+        "question": None,
+        "reponse": None,
+        "score": 0.0
+    }
+
+    for fname in chunk_names:
+        best_q, score, ans = fun(fname, query)
+        if score is None:
+            continue
+        if score > best_global["score"]:
+            best_global.update({
+                "chunk": fname,
+                "question": best_q,
+                "reponse": ans,
+                "score": score
+            })
+
+    elapsed = time.time() - t0
+    print(f"⏱️ Temps total match des Q/R : {elapsed:.3f} sec")
+
+    # Résultat final
+    if best_global["score"] == 0.0:
+        reponse = None
+    else:
+        reponse = best_global["reponse"]
+
+    print("✅ Best chunk:", best_global["chunk"])
+    print("🔍 Best question:", best_global["question"])
+    print("⭐ Score:", best_global["score"])
+    print("🧾 Réponse:", reponse)
+
+
 
 if __name__ == "__main__":
     main()
