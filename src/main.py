@@ -3,15 +3,14 @@ import pandas as pd
 import matplotlib as m
 import numpy as n
 
+from controller.controller import Controller
+from view.view import View
+
 def main():
-    st.write("test")
+    controller = Controller()
+    view = View(controller)
 
-    st.title("ceci est un titre")
-    st.text("textee")
+    view.display()
 
-    st.button("button test")
-
-
-    
-main()
-
+if __name__ == "__main__":
+    main()
