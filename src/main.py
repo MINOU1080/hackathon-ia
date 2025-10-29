@@ -177,6 +177,8 @@ def main():
     #controller.load_data()
     t0 = time.time()
 
+    language = controller.get_view().get_language()
+
     if controller.get_view().get_btn_is_pressed():
         ###############################
 

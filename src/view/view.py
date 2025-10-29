@@ -10,16 +10,16 @@ import soundfile as sf
 class View:
     def __init__(self):
         self.btn_is_pressed = False
+        self.language = "Nerderlands"
 
     def get_btn_is_pressed(self): return self.btn_is_pressed
+
+    def get_language(self): return self.language
 
     def display(self):
         """Affiche l'interface utilisateur."""
         # Create a dropdown menu for selecting a hobby
-        language = st.selectbox("Select a language:", ['French', 'Nerderlands', 'English'])
-
-        # Display the selected hobby
-        st.write("Your Language is:", language)
+        self.language = st.selectbox("Select a language:", ['Nerderlands', 'French', 'English'])
 
         st.title("Voice Reco")
 
