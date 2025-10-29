@@ -16,35 +16,18 @@ class View:
     def __init__(self):
         self.btn_is_pressed = False
         self.language = "Nerderlands"
+        self.name = ""
+        self.birthdate = " "
 
     def get_btn_is_pressed(self): return self.btn_is_pressed
 
     def get_language(self): return self.language
 
-    # def display(self):
-    #     """Affiche l'interface utilisateur."""
-    #     # Create a dropdown menu for selecting a hobby
-    #     self.language = st.selectbox("Select a language:", ['Nerderlands', 'French', 'English'])
+    def get_name(self):
+        return self.name
 
-    #     st.title("Voice Reco")
-
-    #     img = Image.open("image/logo.png")
-    #     st.image(img, width=200)
-
-    #     if st.button("Record"):
-    #         self.btn_is_pressed = True
-
-    # def display(self):
-    #     st.sidebar.header("Paramètres")
-    #     st.sidebar.selectbox("Select a language:", ['Nerderlands', 'French', 'English'])
-
-    #     st.markdown('<div class="app-title">ING: AI assitant</div>', unsafe_allow_html=True)
-
-    #     logo_path = Path("image/logo.png")
-    #     if logo_path.exists():
-    #         col_logo = st.columns([1,2,1])[1]
-    #         with col_logo:
-    #             st.image(Image.open(logo_path), width=160)
+    def get_birthdate(self):
+        return self.birthdate
 
     def display(self):
         """Affiche une UI soignée multilingue avec login (nom + date de naissance)."""
@@ -240,9 +223,9 @@ class View:
             # --- Login
             st.markdown(f"#### {_['login_title']}")
             with st.form("login_form", clear_on_submit=False, border=True):
-                name = st.text_input(_["name"], value=st.session_state["user"]["name"] or "")
+                self.name = st.text_input(_["name"], value=st.session_state["user"]["name"] or "")
                 bdate_default = st.session_state["user"]["birthdate"] or date(2000,1,1)
-                bdate = st.date_input(_["bdate"], value=bdate_default, min_value=date(1900,1,1), max_value=date.today())
+                self.birthdate = st.date_input(_["bdate"], value=bdate_default, min_value=date(1900,1,1), max_value=date.today())
                 submitted = st.form_submit_button(_["login_btn"])
             if submitted:
                 errs = []

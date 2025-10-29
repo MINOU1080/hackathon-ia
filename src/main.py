@@ -264,7 +264,13 @@ def main():
         sd.wait()
 
     elif not controller.is_connected():
-        name,birthdate = " ", " "
+        name = controller.get_view().get_name()
+        birthdate = controller.get_view().get_birthdate()
+        print("name")
+        print(name)
+        print(birthdate)
+
+        controller.send_query(name,birthdate)
 
 
 
