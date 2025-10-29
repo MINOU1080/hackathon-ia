@@ -2,17 +2,14 @@ import mysql.connector
 
 
 class AuthController:
-    def __init__(self,is_connected,name,birthdate):
+    def __init__(self,is_connected = False):
         self.is_connected = is_connected
-        self.name = name
-        self.birthdate = birthdate
-
 
     def isConnected(self):
         return  self.is_connected
 
 
-    def connect(self):
+    def connect(self,name, birthdate):
         conn = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -29,7 +26,7 @@ class AuthController:
               AND birthdate = %s;
         """
 
-        cursor.execute(query, (self.name, self.birthdate))
+        cursor.execute(query, (name, birthdate))
         result = cursor.fetchone()
 
         cursor.close()

@@ -178,8 +178,7 @@ def fun(path, user_query):
     return best_match["question"], best_score, best_match["reponse"]
 
 def main():
-    name,birthdate = " ", " "
-    controller = Controller(View(),AuthController(False,name,birthdate))
+    controller = Controller(View(),AuthController())
 
     language = controller.get_view().get_language()
     controller.d()
@@ -191,11 +190,11 @@ def main():
     themes = load_theme()
     best_theme, best_score = load_matching(themes,query)
 
-    if controller.get_view().get_btn_is_pressed():
+    if controller.get_view().get_btn_is_pressed() and controller.is_connected():
         ###############################
 
-        # query = "Est-il facile de passer de mon compte à l’aperçu de mes enfants ?" #request sur le speech to text
-        path_input_file, input_file_name = controller.get_model().record_voice()  
+
+        path_input_file, input_file_name = controller.get_model().record_voice()
         query = controller.get_model().speech_to_text(path_input_file)
         # print(query)
         texts_dir = "data/texts"
@@ -263,6 +262,9 @@ def main():
 
         sd.play(data, samplerate)
         sd.wait()
+
+    elif not controller.is_connected():
+        name,birthdate = " ", " "
 
 
 

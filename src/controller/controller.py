@@ -22,10 +22,18 @@ class Controller:
     def __init__(self,view,auth_controller):
         self.view = View()
         self.model = Model()
+        self.auth_controller = auth_controller
 
     def get_model(self): return self.model
 
     def get_view(self): return self.view
+
+
+    def is_connected(self):
+        return self.auth_controller.isConnected()
+
+    def send_query(self,name,birthdate):
+        self.auth_controller.connect(name, birthdate)
 
     def handle_record(self):
         pass
