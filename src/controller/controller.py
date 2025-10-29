@@ -23,8 +23,8 @@ import soundfile as sf
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-from src.model.model import Model
-from src.view.view import View
+from model.model import Model
+from view.view import View
 
 path_fr = "data/10. Hackathon_Leuven_2025/chunks/500_750_processed_be_fr_2025_09_23/similar_fr_chunks.json"
 path_eng = "data/10. Hackathon_Leuven_2025/chunks/500_750_processed_be_en_2025_09_23/similar_eng_chunks.json"
@@ -181,8 +181,8 @@ class Controller:
         print("unique ")
         print(unique_list)
         # Normalisation pour robustesse (accents/casse/espaces)
-        norm_questions = [_normalize(q) for q in unique_list]
-        norm_query = _normalize(user_query)
+        norm_questions = [self._normalize(q) for q in unique_list]
+        norm_query = self._normalize(user_query)
 
         vec = TfidfVectorizer().fit(norm_questions + [norm_query])
         q_vec = vec.transform([norm_query])
