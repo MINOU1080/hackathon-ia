@@ -19,7 +19,7 @@ path_nl = "data/10. Hackathon_Leuven_2025/chunks/500_750_processed_be_nl_2025_09
 
 
 class Controller:
-    def __init__(self,view):
+    def __init__(self,view,auth_controller):
         self.view = View()
         self.model = Model()
 
@@ -61,20 +61,5 @@ class Controller:
     def d(self):
         self.view.display()
 
-    def load_data(self):
-        with open(path_fr, "r", encoding="utf-8") as f:
-            similar_data = json.load(f)
 
-            matrix = similar_data.get("matrix", {})
-            preview_chunks = similar_data.get("chunks", {})
-
-            print("Nb chunks listés :", len(matrix))
-            print("Nb preview chunks :", len(preview_chunks))
-            print("preview")
-            print(preview_chunks[0])
-            """ print("printttt")
-            for i, (cid, neigh) in enumerate(matrix.items()):
-                print(f"\nChunk: {cid}")
-                print("Neighbors:", list(neigh.items()))  # les 3 premiers voisins
-            """
 

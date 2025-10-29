@@ -106,5 +106,3 @@ def generate_sql_inserts():
             except Exception as e:
                 print(f"Erreur lors de la lecture du dossier: {e}")
 
-if __name__ == "__main__":
-    generate_sql_inserts()

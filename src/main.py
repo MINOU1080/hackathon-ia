@@ -24,14 +24,15 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 
 
+from extraction import generate_sql_inserts
 from controller.controller import Controller
+from controller.auth_controller import AuthController
 from view.view import View
 
-# app_router.py (exemple d’usage)
-from controller.other import load_sheet, build_index_from_sheet, top_k_from_query, chunk_text_by_id
 
 SHEET_PATH = "data/10. Hackathon_Leuven_2025/chunks/500_750_processed_be_fr_2025_09_23/detailed_fr_chunks.xlsx"  # ou .csv
 x_path = "data/10. Hackathon_Leuven_2025/chunks/500_750_processed_be_fr_2025_09_23/detailed_fr_chunks.xlsx"
+
 def load_theme():
     themes = []
     with open("data/themes/themes_fr.txt", "r", encoding="utf-8") as f:
@@ -152,8 +153,15 @@ def fun(path, user_query):
 
     all_questions = [item["question"] for item in faq]
 
+    unique_list = list(dict.fromkeys(all_questions))
+
+    #print("all question")
+    #print(all_questions)
+
+    print("unique ")
+    print(unique_list)
     # Normalisation pour robustesse (accents/casse/espaces)
-    norm_questions = [_normalize(q) for q in all_questions]
+    norm_questions = [_normalize(q) for q in unique_list]
     norm_query = _normalize(user_query)
 
     vec = TfidfVectorizer().fit(norm_questions + [norm_query])
@@ -170,14 +178,18 @@ def fun(path, user_query):
     return best_match["question"], best_score, best_match["reponse"]
 
 def main():
-    controller = Controller(View())
-    controller.d()
-    # controller.load_data()
-    controller.handle_record()
-    #controller.load_data()
-    t0 = time.time()
+    name,birthdate = " ", " "
+    controller = Controller(View(),AuthController(False,name,birthdate))
 
     language = controller.get_view().get_language()
+    controller.d()
+    generate_sql_inserts()
+    controller.handle_record()
+
+    t0 = time.time()
+    query = "Est-il facile de passer de mon compte à l’aperçu de mes enfants ?" #request sur le speech to text
+    themes = load_theme()
+    best_theme, best_score = load_matching(themes,query)
 
     if controller.get_view().get_btn_is_pressed():
         ###############################

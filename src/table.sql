@@ -1,4 +1,4 @@
-
+CREATE DATABASE ing IF NOT EXISTS;
 
 -- Table des clients
 CREATE TABLE customers (
