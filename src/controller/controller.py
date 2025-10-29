@@ -43,7 +43,6 @@ class Controller:
 
     def get_view(self): return self.view
 
-
     def is_connected(self):
         return self.auth_controller.isConnected()
 

@@ -1,60 +1,3 @@
-# import streamlit as st
-# from PIL import Image
-# import io
-# import os
-# from datetime import datetime
-# import sounddevice as sd
-# import soundfile as sf
-# import streamlit as st
-# from PIL import Image
-# from pathlib import Path
-# from datetime import date  # <-- ajoute ceci
-
-
-
-# class View:
-#     def __init__(self):
-#         self.btn_is_pressed = False
-#         self.language = "Nerderlands"
-#         self.name = ""
-#         self.birthdate = " "
-
-#     def get_btn_is_pressed(self): return self.btn_is_pressed
-
-#     def get_language(self): return self.language
-
-#     def get_name(self):
-#         return self.name
-
-#     def get_birthdate(self):
-#         return self.birthdate
-    
-
-#     def display(self):
-#         """Affiche l'interface utilisateur."""
-#         st.title("Voice Reco")
-
-#         img = Image.open("image/logo.png")
-#         st.image(img, width=200)
-
-#         st.sidebar.header("⚙️ Paramètres")
-#         self.language = st.sidebar.selectbox(
-#             "Language",  # <-- label obligatoire
-#             ["French", "English", "Nederlands"]
-#         )
-
-#         st.subheader("Login")
-#         self.name = st.text_input("Your name", value=self.name or "")
-#         self.birthdate = st.date_input(
-#             "Birthdate",
-#             value=self.birthdate or date(2000, 1, 1),
-#             min_value=date(1900, 1, 1),
-#             max_value=date.today()
-#         )
-
-#         if st.button("Record"):
-#             self.btn_is_pressed = True
-
 from datetime import date, datetime
 from pathlib import Path
 from PIL import Image
@@ -81,7 +24,7 @@ class View:
         self.btn_is_pressed = False
         self.name = ""
         self.birthdate = None  # peut être str/date/datetime/None
-        self.language = "Nederlands"
+        self.language = "English"
 
     def get_btn_is_pressed(self):
         return self.btn_is_pressed
@@ -121,7 +64,7 @@ class View:
             )
             do_login = st.form_submit_button("Login")  # <-- bouton
 
-        # if do_login:
-        #     self.name = name_in.strip()
-        #     self.birthdate = bdate_in
-        #     st.success(f"Logged in as {self.name} · {self.birthdate.isoformat()}")
+        if do_login:
+            self.name = name_in.strip()
+            self.birthdate = bdate_in
+            st.success(f"Logged in as {self.name} · {self.birthdate.isoformat()}")
