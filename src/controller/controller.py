@@ -4,6 +4,9 @@ from model.model import Model
 from view.view import View
 import pandas as pd
 import json
+import numpy as np
+from sentence_transformers import SentenceTransformer
+
 
 path_fr = "data/10. Hackathon_Leuven_2025/chunks/500_750_processed_be_fr_2025_09_23/similar_fr_chunks.json"
 path_eng = "data/10. Hackathon_Leuven_2025/chunks/500_750_processed_be_en_2025_09_23/similar_eng_chunks.json"
@@ -36,14 +39,26 @@ class Controller:
 
             print("Nb chunks listés :", len(matrix))
             print("Nb preview chunks :", len(preview_chunks))
-
-
             print("preview")
             print(preview_chunks[0])
-
-
             """ print("printttt")
             for i, (cid, neigh) in enumerate(matrix.items()):
                 print(f"\nChunk: {cid}")
                 print("Neighbors:", list(neigh.items()))  # les 3 premiers voisins
             """
+
+    def find_best_chunk(query: str):
+        q_emb = model.encode([query], normalize_embeddings=True)[0]
+        sims = embs @ q_emb
+        idx = int(np.argmax(sims))
+        return ids[idx], titles[idx], float(sims[idx])
+
+
+    def test(self):
+        model = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+
+        chunk_titles = {cid: extract_title(txt) for cid, txt in preview_chunks.items()}
+
+        ids = list(chunk_titles.keys())
+        titles = list(chunk_titles.values())
+        embs = model.encode(titles, normalize_embeddings=True)

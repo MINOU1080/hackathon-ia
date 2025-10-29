@@ -1,3 +1,5 @@
+
+
 -- Table des clients
 CREATE TABLE customers (
     customer_id INT AUTO_INCREMENT PRIMARY KEY,
