@@ -1,5 +1,13 @@
 import csv
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+load_dotenv()
+mysql_user: str | None = os.getenv('MYSQL_USER')
+mysql_password: str | None = os.getenv('MYSQL_PASSWORD')
+
 
 def find_csv_files():
     """Trouve automatiquement le dossier contenant les fichiers CSV."""
