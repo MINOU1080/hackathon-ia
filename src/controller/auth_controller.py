@@ -8,12 +8,12 @@ class AuthController:
     def isConnected(self):
         return  self.is_connected
 
-
     def connect(self,name, birthdate):
         conn = mysql.connector.connect(
-            host="localhost",
+            host="127.0.0.1",
+            port=3307,
             user="root",
-            password="MangoJaune",
+            password="root",
             database="ing"
         )
 
