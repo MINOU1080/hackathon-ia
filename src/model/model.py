@@ -26,7 +26,7 @@ class Model:
 
         sf.write(filepath, recording, samplerate, subtype='PCM_16')
 
-        return filepath
+        return filepath, filename
 
 
     def text_to_speech(self, txt: str) -> str:
@@ -40,7 +40,10 @@ class Model:
 
         response = client.synthesize_speech(input=text_input, voice=voice, audio_config=audio_config)
 
-        with open("output.mp3", "wb") as f:
+        output_dir = "data/output"
+        output_file_path = os.path.join(output_dir, "output.mp3")
+
+        with open(output_file_path, "wb") as f:
             f.write(response.audio_content)
 
     def speech_to_text(self, input_file: str) -> str:
@@ -56,8 +59,6 @@ class Model:
         transcripts = []
         for result in response.results:
             text = result.alternatives[0].transcript
-            print("Transcript:", text)      # pour debug dans console
-            st.text(text)                   # pour afficher dans Streamlit
             transcripts.append(text)
 
         # Retourner tout le texte concaténé

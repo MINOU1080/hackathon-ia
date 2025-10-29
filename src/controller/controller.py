@@ -1,4 +1,5 @@
 from asyncio import sleep
+import os
 import tempfile
 import streamlit as st
 from model.model import Model
@@ -24,8 +25,17 @@ class Controller:
     #     # st.write("Texte complet :", transcript)
     #     input_audio = self.model.record_audio()
         if self.view.get_btn_is_pressed():
-            self.model.record_voice()
-        # return self.model.record_audio()
+            path_input_file, input_file_name = self.model.record_voice()  
+            input_str = self.model.speech_to_text(path_input_file)
+            
+            texts_dir = "data/texts"
+            os.makedirs(texts_dir, exist_ok=True)  # crée le dossier si nécessaire
+
+            txt_file_name = input_file_name.replace(".wav", ".txt")
+            txt_file_path = os.path.join(texts_dir, txt_file_name)
+
+            with open(txt_file_path, "w", encoding="utf-8") as f:
+                f.write(input_str)
 
     def d(self):
         self.view.display()
