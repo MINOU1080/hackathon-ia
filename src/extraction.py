@@ -44,65 +44,59 @@ def find_csv_files():
 
 
 def generate_sql_inserts():
-    """Génère les fichiers SQL d'insertion"""
-    
     data_dir = find_csv_files()
     if not data_dir:
-        print("Impossible de trouver les fichiers CSV")
-        return
-    
+        print("Impossible de trouver les fichiers CSV"); return
+
     current_dir = os.path.dirname(os.path.abspath(__file__))
     output_dir = os.path.join(current_dir, "../sql_inserts")
     os.makedirs(output_dir, exist_ok=True)
-    
-    # Mapping des fichiers
+
     file_mapping = {
         'customers.csv': 'customers',
-        'products.csv': 'products_active', 
+        'products.csv': 'products_active',
         'products_closed.csv': 'products_closed',
         'transactions.csv': 'transactions'
     }
-    
+
     for csv_file, table_name in file_mapping.items():
         csv_path = os.path.join(data_dir, csv_file)
-        
         print(f"\nRecherche de: {csv_path}")
-        
-        if os.path.exists(csv_path):
-            output_path = os.path.join(output_dir, f"insert_{table_name}.sql")
-            
-            print(f"✓ Fichier trouvé: {csv_file}")
-            print(f"Génération: {output_path}")
-            
-            with open(csv_path, 'r', encoding='utf-8') as csvfile:
-                reader = csv.DictReader(csvfile)
-                
-                with open(output_path, 'w', encoding='utf-8') as sqlfile:
-                    count = 0
-                    for row in reader:
-                        columns = list(row.keys())
-                        values = []
-                        
-                        for key, value in row.items():
-                            if value == '':
-                                values.append('NULL')
-                            else:
-                                escaped_value = str(value).replace("'", "''")
-                                values.append(f"'{escaped_value}'")
-                        
-                        sql = f"INSERT INTO {table_name} ({', '.join(columns)}) VALUES ({', '.join(values)});\n"
-                        sqlfile.write(sql)
-                        count += 1
-            
-            print(f"✓ {count} lignes générées dans {output_path}")
-        else:
-            print(f"✗ Fichier introuvable: {csv_file}")
-            # Lister les fichiers disponibles dans le dossier
-            print("Fichiers disponibles dans le dossier:")
-            try:
-                for file in os.listdir(data_dir):
-                    if file.endswith('.csv'):
-                        print(f"  - {file}")
-            except Exception as e:
-                print(f"Erreur lors de la lecture du dossier: {e}")
+        if not os.path.exists(csv_path):
+            print(f"✗ Fichier introuvable: {csv_file}"); continue
 
+        output_path = os.path.join(output_dir, f"insert_{table_name}.sql")
+        print(f"✓ Fichier trouvé: {csv_file}")
+        print(f"Génération: {output_path}")
+
+        with open(csv_path, 'r', encoding='utf-8', newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            headers = reader.fieldnames or []
+            cols_backticked = [f"`{h.replace('`','``')}`" for h in headers]
+
+            with open(output_path, 'w', encoding='utf-8') as sqlfile:
+                # 1) Sélectionne la DB
+                sqlfile.write("USE ing;\n\n")
+                # 2) Crée la table si elle n'existe pas (tout en TEXT pour aller vite)
+                ddl_cols = ", ".join([f"{c} TEXT" for c in cols_backticked])
+                sqlfile.write(f"CREATE TABLE IF NOT EXISTS `{table_name}` ({ddl_cols});\n\n")
+
+                # 3) INSERTs
+                count = 0
+                for row in reader:
+                    values = []
+                    for v in (row.get(h, '') for h in headers):
+                        if v == '' or v is None:
+                            values.append('NULL')
+                        else:
+                            values.append("'" + str(v).replace("'", "''") + "'")
+                    sql = f"INSERT INTO `{table_name}` ({', '.join(cols_backticked)}) VALUES ({', '.join(values)});\n"
+                    sqlfile.write(sql)
+                    count += 1
+
+        print(f"✓ {count} lignes générées dans {output_path}")
+
+
+
+
+generate_sql_inserts()
