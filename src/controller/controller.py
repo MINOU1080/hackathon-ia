@@ -3,8 +3,7 @@ import os
 import tempfile
 import numpy as np
 import streamlit as st
-from model.model import Model
-from view.view import View
+from packaging.markers import _normalize
 import pandas as pd
 import json
 import sounddevice as sd
@@ -23,6 +22,9 @@ import sounddevice as sd
 import soundfile as sf
 import numpy as np
 from sentence_transformers import SentenceTransformer
+
+from src.model.model import Model
+from src.view.view import View
 
 path_fr = "data/10. Hackathon_Leuven_2025/chunks/500_750_processed_be_fr_2025_09_23/similar_fr_chunks.json"
 path_eng = "data/10. Hackathon_Leuven_2025/chunks/500_750_processed_be_en_2025_09_23/similar_eng_chunks.json"
