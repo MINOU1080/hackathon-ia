@@ -190,7 +190,7 @@ def main():
     themes = load_theme()
     best_theme, best_score = load_matching(themes,query)
 
-    if controller.get_view().get_btn_is_pressed() and controller.is_connected():
+    if controller.get_view().get_btn_is_pressed(): # and controller.is_connected():
         ###############################
 
 
@@ -263,14 +263,14 @@ def main():
         sd.play(data, samplerate)
         sd.wait()
 
-    elif not controller.is_connected():
-        name = controller.get_view().get_name()
-        birthdate = controller.get_view().get_birthdate()
-        print("name")
-        print(name)
-        print(birthdate)
+    # elif not controller.is_connected():
+    #     name = controller.get_view().get_name()
+    #     birthdate = controller.get_view().get_birthdate()
+    #     print("name")
+    #     print(name)
+    #     print(birthdate)
 
-        controller.send_query(name,birthdate)
+    #     controller.send_query(name,birthdate)
 
 
 

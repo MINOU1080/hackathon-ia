@@ -11,7 +11,7 @@ import soundfile as sf
 
 class Model:
     def record_voice(self) -> str:
-        duration = 5 ######################### a changer ########################   
+        duration = 10 ######################### a changer ########################   
         samplerate = 44100
         channels = 1
 
@@ -80,7 +80,10 @@ class Model:
         return text
     
     def text_to_speech(self, txt: str, *, clean: bool = True) -> str:
-        txt = self.clean_transcript(txt)
+        if txt is not None:
+            txt = self.clean_transcript(txt)
+        else:
+            txt = "Did not understand"
 
         client = texttospeech.TextToSpeechClient()
         text_input = texttospeech.SynthesisInput(text=txt)
