@@ -229,17 +229,17 @@ class View:
                 submitted = st.form_submit_button(_["login_btn"])
             if submitted:
                 errs = []
-                if not name.strip():
+                if not self.name.strip():
                     errs.append({"fr":"Le nom est requis.","en":"Name is required.","nl":"Naam is vereist."}[lang_key])
-                if bdate > date.today():
+                if self.birthdate > date.today():
                     errs.append({"fr":"La date ne peut pas être dans le futur.",
                                 "en":"Birthdate cannot be in the future.",
                                 "nl":"Geboortedatum kan niet in de toekomst liggen."}[lang_key])
                 if errs:
                     for e in errs: st.error(e)
                 else:
-                    st.session_state["user"] = {"name": name.strip(), "birthdate": bdate}
-                    st.success(f"{_['login_ok']}, {name.strip()}!")
+                    st.session_state["user"] = {"name": self.name.strip(), "birthdate": self.birthdate}
+                    st.success(f"{_['login_ok']}, {self.name.strip()}!")
             if st.session_state["user"]["name"]:
                 who = st.session_state['user']['name']
                 st.info(f"{_['connected_as']} **{who}**")
