@@ -15,6 +15,12 @@ class View:
 
     def display(self):
         """Affiche l'interface utilisateur."""
+        # Create a dropdown menu for selecting a hobby
+        language = st.selectbox("Select a language:", ['French', 'Nerderlands', 'English'])
+
+        # Display the selected hobby
+        st.write("Your Language is:", language)
+
         st.title("Voice Reco")
 
         img = Image.open("image/logo.png")

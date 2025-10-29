@@ -1,6 +1,7 @@
 from datetime import datetime
 import os
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
+import re
 
 from google.cloud import texttospeech, speech
 import streamlit as st
@@ -69,17 +70,25 @@ class Model:
     #     # Retourner tout le texte concaténé
     #     return " ".join(transcripts)
 
-    def text_to_speech(self, txt: str) -> str:
-        """Convertit du texte en fichier audio WAV et retourne le chemin du fichier."""
-        client = texttospeech.TextToSpeechClient()
+    def clean_transcript(self, text: str) -> str:
+        text = text.replace("*", "")
+        text = re.sub(r'\(\s*(…|\.{3,})\s*\)', ' ', text)
+        text = re.sub(r'…|\.{3,}', ' ', text)
+        text = re.sub(r'([!?.,;:])\1+', r'\1', text)
+        text = re.sub(r'\s+', ' ', text).strip()
+        print(text)
+        return text
+    
+    def text_to_speech(self, txt: str, *, clean: bool = True) -> str:
+        txt = self.clean_transcript(txt)
 
+        client = texttospeech.TextToSpeechClient()
         text_input = texttospeech.SynthesisInput(text=txt)
 
         voice = texttospeech.VoiceSelectionParams(
             language_code="fr-BE",
             ssml_gender=texttospeech.SsmlVoiceGender.MALE
         )
-
         audio_config = texttospeech.AudioConfig(
             audio_encoding=texttospeech.AudioEncoding.LINEAR16
         )
@@ -90,36 +99,27 @@ class Model:
             audio_config=audio_config
         )
 
-        # Crée le dossier data/output s'il n'existe pas
         output_dir = "data/output"
         os.makedirs(output_dir, exist_ok=True)
+        filename = f"output_{datetime.now().strftime('%Y%m%d_%H%M%S')}.wav"
+        output_path = os.path.join(output_dir, filename)
 
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"output_{timestamp}.wav"
-        output_file_path = os.path.join(output_dir, filename)
-
-        # Écrit le fichier audio
-        with open(output_file_path, "wb") as f:
+        with open(output_path, "wb") as f:
             f.write(response.audio_content)
 
-        return output_file_path  # retourne le chemin complet du fichier
+        return output_path
 
     def speech_to_text(self, input_file: str) -> str:
-        """Convertit un fichier audio WAV LINEAR16 en texte et retourne la transcription."""
         client = speech.SpeechClient()
-
         with open(input_file, "rb") as f:
             audio = speech.RecognitionAudio(content=f.read())
-
         config = speech.RecognitionConfig(
             encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-            language_code="fr-BE"
+            language_code="fr-BE",
+            enable_automatic_punctuation=True,
         )
-
         response = client.recognize(config=config, audio=audio)
-
-        transcripts = []
-        for result in response.results:
-            transcripts.append(result.alternatives[0].transcript)
-
-        return " ".join(transcripts)
+        raw = " ".join(r.alternatives[0].transcript for r in response.results)
+        # res = self.clean_transcript(raw)  # <-- maintenant défini
+        # print(res)
+        return raw
