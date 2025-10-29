@@ -11,7 +11,8 @@ def main():
     controller = Controller(View())
 
     controller.d()
-    controller.load_data()
+    # controller.load_data()
+    controller.handle_record()
 
 if __name__ == "__main__":
     main()

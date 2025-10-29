@@ -1,16 +1,34 @@
+from datetime import datetime
 import os
-
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
 
 from google.cloud import texttospeech, speech
 import streamlit as st
+import sounddevice as sd
+import wavio
+import soundfile as sf
 
 class Model:
-    def record_audio(self):
-        """Simule un enregistrement audio."""
-        self.last_message = "You did press the button"
-        return self.last_message
-    
+    def record_voice(self) -> str:
+        duration = 5 ######################### a changer ########################   
+        samplerate = 44100
+        channels = 1
+
+        recording = sd.rec(int(duration * samplerate), samplerate=samplerate, channels=channels, dtype='int16')
+        sd.wait()
+
+        recordings_dir = os.path.join("data", "recordings")
+        os.makedirs(recordings_dir, exist_ok=True)
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"recording_{timestamp}.wav"
+        filepath = os.path.join(recordings_dir, filename)
+
+        sf.write(filepath, recording, samplerate, subtype='PCM_16')
+
+        return filepath
+
+
     def text_to_speech(self, txt: str) -> str:
         client = texttospeech.TextToSpeechClient()
 

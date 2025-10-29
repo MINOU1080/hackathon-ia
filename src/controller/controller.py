@@ -1,4 +1,5 @@
 from asyncio import sleep
+import tempfile
 import streamlit as st
 from model.model import Model
 from view.view import View
@@ -12,17 +13,19 @@ path_nl = "data/10. Hackathon_Leuven_2025/chunks/500_750_processed_be_nl_2025_09
 
 class Controller:
     def __init__(self,view):
-        self.view = view
+        self.view = View()
         self.model = Model()
 
     def handle_record(self):
-        """Appelle le modèle pour enregistrer le son."""
-        self.model.text_to_speech("bonjour, comment sa va ?") #####
+    #     """Appelle le modèle pour enregistrer le son."""
+    #     # self.model.text_to_speech("bonjour, comment sa va ?") #####
 
-        transcript = self.model.speech_to_text("output.mp3")
-        st.write("Texte complet :", transcript)
-
-        return self.model.record_audio()
+    #     # transcript = self.model.speech_to_text("output.mp3")
+    #     # st.write("Texte complet :", transcript)
+    #     input_audio = self.model.record_audio()
+        if self.view.get_btn_is_pressed():
+            self.model.record_voice()
+        # return self.model.record_audio()
 
     def d(self):
         self.view.display()
