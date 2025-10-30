@@ -16,7 +16,7 @@ The assistant enables users to ask questions **orally** (via microphone), automa
 ### 🎥 Demo Video  
 
 👉 A video demonstration of our prototype is available here:  
-**[📺 Click here to watch the demo](#)**  
+**[📺 Click here to watch the demo]([#](https://www.youtube.com/watch?v=KRAxs6d5dfU))**  
 
 
 ## 🧩 Core Features  
