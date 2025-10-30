@@ -1,28 +1,10 @@
-from asyncio import sleep
-import os
-import tempfile
-import numpy as np
-import streamlit as st
-from packaging.markers import _normalize
-import pandas as pd
-import json
-import sounddevice as sd
-import soundfile as sf
-import numpy as np
-from sentence_transformers import SentenceTransformer
 import re
 import unicodedata
-import time
 from sentence_transformers import SentenceTransformer,util
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-import os
 import pandas as pd
-import sounddevice as sd
-import soundfile as sf
 import numpy as np
-from sentence_transformers import SentenceTransformer
-
 from model.model import Model
 from view.view import View
 
@@ -79,19 +61,11 @@ class Controller:
     def find_relevant_chunks_xlsx(self,
             xlsx_path: str,
             theme: str,
-            sheet_name: str | int | None = 0,  # nom/indice de la feuille (0 = première)
+            sheet_name: str | int | None = 0,
             top_k: int = 5,
             use_embeddings: bool = False,
             model_name: str = "sentence-transformers/all-MiniLM-L6-v2"
     ):
-        """
-        xlsx_path    : chemin vers le .xlsx
-        theme        : le thème extrait (string)
-        sheet_name   : nom/indice de la feuille (None = toutes fusionnées)
-        top_k        : nb de résultats
-        use_embeddings : True pour Sentence-Transformers (plus lent, plus robuste)
-        """
-        # 1) Lire le XLSX
         if sheet_name is None:
             # concat toutes les feuilles si None
             xls = pd.read_excel(xlsx_path, sheet_name=None, engine="openpyxl")
@@ -161,7 +135,7 @@ class Controller:
         matches = re.findall(pattern, text, flags=re.DOTALL | re.MULTILINE)
 
         faq = []
-        for q_text, r_text in matches:  # ✅ éviter d'écraser 'user_query'
+        for q_text, r_text in matches:
             faq.append({
                 "question": q_text.strip(),
                 "reponse": r_text.strip()
@@ -171,14 +145,11 @@ class Controller:
             return None, 0.0, None
 
         all_questions = [item["question"] for item in faq]
-
         unique_list = list(dict.fromkeys(all_questions))
-
-        # print("all question")
-        # print(all_questions)
 
         print("unique ")
         print(unique_list)
+
         # Normalisation pour robustesse (accents/casse/espaces)
         norm_questions = [self._normalize(q) for q in unique_list]
         norm_query = self._normalize(user_query)
@@ -195,6 +166,3 @@ class Controller:
 
         # Retourne (question, score, réponse)
         return best_match["question"], best_score, best_match["reponse"]
-
-
-
